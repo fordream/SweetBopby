@@ -18,6 +18,8 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.vnp.sweetbopby.utils.SweetUtils;
 import org.vnp.sweetbopby.utils.SweetUtils.Way;
 
+import com.vnp.core.common.LogUtils;
+
 import android.os.Bundle;
 
 public class MainActivity extends BaseMGameActivty {
@@ -46,7 +48,9 @@ public class MainActivity extends BaseMGameActivty {
 	@Override
 	public boolean onSceneTouchEvent(Scene arg0, TouchEvent arg1) {
 
+		
 		if (arg1.getAction() == TouchEvent.ACTION_DOWN) {
+			LogUtils.e("", "down");
 			int x = (int) arg1.getX();
 			int y = (int) arg1.getY();
 			// null or not null

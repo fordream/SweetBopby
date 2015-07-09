@@ -9,8 +9,8 @@ import game.base.ItemObject;
 
 public class SweetUtils {
 
-	public static final int ROWS = 9;
-	public static final int COLUMNS = 9;
+	public static final int ROWS = 8;
+	public static final int COLUMNS = 8;
 
 	public static class Way {
 		public Way(ItemObject parent, ItemObject it) {

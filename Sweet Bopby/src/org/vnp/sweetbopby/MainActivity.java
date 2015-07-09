@@ -4,9 +4,13 @@ import game.base.BaseMGameActivty;
 import game.base.BaseMSprise;
 
 import org.anddev.andengine.entity.scene.Scene;
+import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.input.touch.TouchEvent;
 
+import com.vnp.core.common.CommonAndroid;
+
 import android.os.Bundle;
+import android.view.Display;
 
 public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise baseSprise = new BaseMSprise();
@@ -18,7 +22,17 @@ public class MainActivity extends BaseMGameActivty {
 
 	@Override
 	public void onLoadComplete() {
-		getmMainScene().attachChild(baseSprise.getSprCat());
+		int with = baseSprise.getRegCat().getWidth();
+		int height = baseSprise.getRegCat().getHeight();
+		int left = ((int)getmCamera().getWidth()- with * 9) / 2;
+		int top = ((int)getmCamera().getHeight()- height * 9) / 2;
+
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				AnimatedSprite sprite = new AnimatedSprite(left + i * with, top + j * height, baseSprise.getRegCat().deepCopy());
+				getmMainScene().attachChild(sprite);
+			}
+		}
 	}
 
 	@Override

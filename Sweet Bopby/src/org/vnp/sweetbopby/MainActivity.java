@@ -50,7 +50,7 @@ public class MainActivity extends BaseMGameActivty {
 
 		
 		if (arg1.getAction() == TouchEvent.ACTION_DOWN) {
-			LogUtils.e("", "down");
+			LogUtils.e("aaaxs", "down");
 			int x = (int) arg1.getX();
 			int y = (int) arg1.getY();
 			// null or not null

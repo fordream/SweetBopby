@@ -4,17 +4,25 @@ import game.base.BaseMGameActivty;
 import game.base.BaseMSprise;
 import game.base.ItemObject;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.Random;
 
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+import org.vnp.sweetbopby.utils.SweetUtils;
+import org.vnp.sweetbopby.utils.SweetUtils.Way;
 
 import android.os.Bundle;
 
 public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise baseSprise = new BaseMSprise();
-	private ItemObject[][] boards = new ItemObject[9][9];
+	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
 
 	private BaseMSprise[] bigs = new BaseMSprise[8];
 	private BaseMSprise[] smalls = new BaseMSprise[8];
@@ -23,8 +31,8 @@ public class MainActivity extends BaseMGameActivty {
 	protected void onCreate(Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
 
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < SweetUtils.ROWS; i++) {
+			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j] = new ItemObject();
 			}
 		}
@@ -57,6 +65,11 @@ public class MainActivity extends BaseMGameActivty {
 					itemSelected.runAnimation(false);
 				} else if (!itemSelected.isBig()) {
 					// FIXME find way
+					Way way = SweetUtils.findway(itemChecked, itemSelected, boards);
+					if (way != null) {
+						itemSelected.randomType(getmMainScene(), itemChecked.getType(), bigs);
+						itemChecked.clear(getmMainScene());
+					}
 				}
 			}
 		}
@@ -65,8 +78,8 @@ public class MainActivity extends BaseMGameActivty {
 	}
 
 	private ItemObject getItemSlected() {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < SweetUtils.ROWS; i++) {
+			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				if (boards[i][j].isChecked()) {
 					return boards[i][j];
 				}
@@ -76,8 +89,8 @@ public class MainActivity extends BaseMGameActivty {
 	}
 
 	private ItemObject getItemSlected(int x, int y) {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < SweetUtils.ROWS; i++) {
+			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				if (boards[i][j].isSelected(x, y)) {
 					return boards[i][j];
 				}
@@ -91,11 +104,11 @@ public class MainActivity extends BaseMGameActivty {
 		TiledTextureRegion region = baseSprise.getRegCat();
 		int with = region.getWidth() / 2;
 		int height = region.getHeight();
-		int left = ((int) getmCamera().getWidth() - with * 9) / 2;
-		int top = ((int) getmCamera().getHeight() - height * 9) / 2;
+		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS) / 2;
+		int top = ((int) getmCamera().getHeight() - height * SweetUtils.ROWS) / 2;
 
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < SweetUtils.ROWS; i++) {
+			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].create(getmMainScene(), left, top, i, j, region);
 			}
 		}
@@ -104,8 +117,8 @@ public class MainActivity extends BaseMGameActivty {
 	}
 
 	public void createNewGame() {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
+		for (int i = 0; i < SweetUtils.ROWS; i++) {
+			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].clear(getmMainScene());
 			}
 		}
@@ -113,8 +126,8 @@ public class MainActivity extends BaseMGameActivty {
 		Random random = new Random();
 
 		for (int i = 0; i < 3; i++) {
-			int px = random.nextInt(9);
-			int py = random.nextInt(9);
+			int px = random.nextInt(SweetUtils.COLUMNS);
+			int py = random.nextInt(SweetUtils.ROWS);
 
 			if (boards[px][py].getType() != -1) {
 				i--;

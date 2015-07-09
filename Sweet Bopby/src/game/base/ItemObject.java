@@ -38,6 +38,7 @@ public class ItemObject {
 			scene.detachChild(sprite);
 		}
 		sprite = null;
+		runAnimation(false);
 	}
 
 	public void randomType(Scene scene, int type, BaseMSprise[] bigs) {
@@ -61,21 +62,22 @@ public class ItemObject {
 		// run animation selected
 		if (isChecked()) {
 			if (isBig()) {
-				backgroud.animate(100);
+				// backgroud.animate(100);
 				if (sprite != null)
-					sprite.animate(100);
+					sprite.animate(200);
 			}
 		} else {
-			backgroud.stopAnimation();
-			backgroud.setCurrentTileIndex(0);
+			// backgroud.stopAnimation();
+			// backgroud.setCurrentTileIndex(0);
 
 			if (sprite != null) {
 				sprite.stopAnimation();
 
-				if (isBig())
+				if (isBig()) {
 					sprite.setCurrentTileIndex(0);
-				else
+				} else {
 					sprite.setCurrentTileIndex(1);
+				}
 			}
 		}
 	}
@@ -87,6 +89,10 @@ public class ItemObject {
 	}
 
 	public boolean isBig() {
-		return type <= 8;
+		return type <= 8 && type >= 0;
+	}
+
+	public void setType(int type2) {
+		type = type2;
 	}
 }

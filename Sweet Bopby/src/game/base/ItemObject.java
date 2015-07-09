@@ -24,7 +24,7 @@ public class ItemObject {
 	public void create(Scene scene, int left, int top, int positionx, int positionY, TiledTextureRegion region) {
 		position.x = positionx;
 		position.y = positionY;
-		int with = region.getWidth()/2;
+		int with = region.getWidth() / 2;
 		int height = region.getHeight();
 		backgroud = new AnimatedSprite(left + positionx * with, top + positionY * height, region.deepCopy());
 		scene.attachChild(backgroud);
@@ -60,10 +60,23 @@ public class ItemObject {
 		// FIXME
 		// run animation selected
 		if (isChecked()) {
-			backgroud.animate(100);
+			if (isBig()) {
+				backgroud.animate(100);
+				if (sprite != null)
+					sprite.animate(100);
+			}
 		} else {
 			backgroud.stopAnimation();
 			backgroud.setCurrentTileIndex(0);
+
+			if (sprite != null) {
+				sprite.stopAnimation();
+
+				if (isBig())
+					sprite.setCurrentTileIndex(0);
+				else
+					sprite.setCurrentTileIndex(1);
+			}
 		}
 	}
 

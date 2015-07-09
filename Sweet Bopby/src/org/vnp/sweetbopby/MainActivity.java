@@ -130,7 +130,7 @@ public class MainActivity extends BaseMGameActivty {
 		baseSprise.onCreateResources(mEngine, this, "mbg.png", 2, 1);
 		for (int i = 0; i < 8; i++) {
 			smalls[i].onCreateResources(mEngine, this, (i + 1) + "_small.png", 1, 1);
-			bigs[i].onCreateResources(mEngine, this, (i + 1) + ".png", 1, 1);
+			bigs[i].onCreateResources(mEngine, this, (i + 1) + "_x.png", 2, 1);
 		}
 	}
 

@@ -87,7 +87,7 @@ public class ItemObject {
 
 		update(getmMainScene);
 	}
-
+	
 	public void update(Scene getmMainScene) {
 		if (sprite != null) {
 			if (getType() == -1) {
@@ -95,16 +95,16 @@ public class ItemObject {
 				sprite.setCurrentTileIndex(2, 0);
 			} else if (isBig()) {
 				if (isChecked()) {
-					sprite.setCurrentTileIndex(1, getType());
+					sprite.setCurrentTileIndex(0, getType());
 					sprite.animate(new long[] { 100, 100, 100 }, (getType() - 1) * 3, (getType() - 1) * 3 + 2, true);
 				} else {
 					sprite.stopAnimation();
-					sprite.setCurrentTileIndex(0, getType());
+					sprite.setCurrentTileIndex(0, getType() - 1);
 				}
 
 			} else {
 				sprite.stopAnimation();
-				sprite.setCurrentTileIndex(1, getType() / 10 - 1);
+				sprite.setCurrentTileIndex(1, (getType() / 10) - 1);
 			}
 		}
 	}

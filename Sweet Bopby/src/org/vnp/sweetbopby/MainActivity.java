@@ -23,6 +23,7 @@ import android.os.Message;
 
 public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise baseSprise = new BaseMSprise();
+	private BaseMSprise newGame = new BaseMSprise();
 	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
 	private BaseMSprise mBoard = new BaseMSprise();
 	private BaseMSprise line = new BaseMSprise();
@@ -40,7 +41,6 @@ public class MainActivity extends BaseMGameActivty {
 
 	@Override
 	public boolean onSceneTouchEvent(Scene mScene, TouchEvent arg1) {
-
 		if (arg1.getAction() == TouchEvent.ACTION_DOWN) {
 			int x = (int) arg1.getX();
 			int y = (int) arg1.getY();
@@ -315,7 +315,10 @@ public class MainActivity extends BaseMGameActivty {
 				boards[i][j].create(getmMainScene(), left, top, i, j, region);
 			}
 		}
-
+		AnimatedSprite newGame = this.newGame.getSprCat();
+		getmMainScene().attachChild(newGame);
+		newGame.animate(200);
+		newGame.setPosition(left / 2 - newGame.getWidth() / 2, top);
 		createNewGame();
 	}
 
@@ -388,6 +391,7 @@ public class MainActivity extends BaseMGameActivty {
 		// }
 		mBoard.onCreateResources(mEngine, this, "bongs.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
+		newGame.onCreateResources(getEngine(), this, "new_game.png", 2, 1);
 	}
 
 	@Override
@@ -396,6 +400,7 @@ public class MainActivity extends BaseMGameActivty {
 		baseSprise.onCreateScene(getmMainScene());
 		line.onCreateScene(getmMainScene());
 		mBoard.onCreateScene(getmMainScene());
+		newGame.onCreateScene(getmMainScene());
 		return scene;
 	}
 }

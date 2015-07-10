@@ -309,8 +309,10 @@ public class MainActivity extends BaseMGameActivty {
 		TiledTextureRegion region = baseSprise.getRegCat();
 		int with = region.getWidth() / 2;
 		int height = region.getHeight();
-		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS) / 2;
 		int top = ((int) getmCamera().getHeight() - height * SweetUtils.ROWS) / 2;
+		
+		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS) - top;
+		
 
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {

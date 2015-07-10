@@ -54,7 +54,7 @@ public abstract class BaseMGameActivty extends BaseGameActivity implements IOnSc
 	/**
 	 * Camera
 	 */
-	private Camera mCamera = new Camera(0, 0, 640, 960);
+	private Camera mCamera = new Camera(0, 0, 960, 640);
 
 	public Camera getmCamera() {
 		return mCamera;
@@ -65,6 +65,6 @@ public abstract class BaseMGameActivty extends BaseGameActivity implements IOnSc
 		final Display display = getWindowManager().getDefaultDisplay();
 		int cameraWidth = display.getWidth();
 		int cameraHeight = display.getHeight();
-		return new Engine(new EngineOptions(true, ScreenOrientation.PORTRAIT, new RatioResolutionPolicy(cameraWidth, cameraHeight), mCamera).setNeedsSound(true).setNeedsMusic(true));
+		return new Engine(new EngineOptions(true, ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(cameraWidth, cameraHeight), mCamera).setNeedsSound(true).setNeedsMusic(true));
 	}
 }

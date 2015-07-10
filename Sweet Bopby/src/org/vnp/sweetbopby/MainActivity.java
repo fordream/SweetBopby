@@ -197,10 +197,79 @@ public class MainActivity extends BaseMGameActivty {
 					break;
 				}
 			}
+		} else if (typeCheck == CHECKEAT.TREO00) {
+			ItemObject item = selected;
+			while (item != null) {
+				if (item.getType() == type) {
+					if (!list.contains(item)) {
+						list.add(item);
+					}
+
+					if (item.getPosition().y - 1 >= 0 && item.getPosition().x - 1 >= 0) {
+						item = boards[item.getPosition().x - 1][item.getPosition().y - 1];
+					} else {
+						item = null;
+					}
+				} else {
+					break;
+				}
+			}
+
+			item = selected;
+			while (item != null) {
+				if (item.getType() == type) {
+					if (!list.contains(item)) {
+						list.add(item);
+					}
+
+					if (item.getPosition().y + 1 < SweetUtils.ROWS && item.getPosition().x + 1 < SweetUtils.ROWS) {
+						item = boards[item.getPosition().x + 1][item.getPosition().y + 1];
+					} else {
+						item = null;
+					}
+				} else {
+					break;
+				}
+			}
+		} else if (typeCheck == CHECKEAT.TREO0MAX) {
+			ItemObject item = selected;
+			while (item != null) {
+				if (item.getType() == type) {
+					if (!list.contains(item)) {
+						list.add(item);
+					}
+
+					if (item.getPosition().y + 1 < SweetUtils.ROWS && item.getPosition().x - 1 >= 0) {
+						item = boards[item.getPosition().x - 1][item.getPosition().y + 1];
+					} else {
+						item = null;
+					}
+				} else {
+					break;
+				}
+			}
+
+			item = selected;
+			while (item != null) {
+				if (item.getType() == type) {
+					if (!list.contains(item)) {
+						list.add(item);
+					}
+
+					if (item.getPosition().x + 1 < SweetUtils.ROWS && item.getPosition().y - 1 >= 0) {
+						item = boards[item.getPosition().x + 1][item.getPosition().y - 1];
+					} else {
+						item = null;
+					}
+				} else {
+					break;
+				}
+			}
 		}
 
-		if (list.size() < 5)
+		if (list.size() < 5) {
 			list.clear();
+		}
 		return list;
 	}
 

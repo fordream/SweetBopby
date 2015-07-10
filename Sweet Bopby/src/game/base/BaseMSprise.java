@@ -23,7 +23,7 @@ public class BaseMSprise {
 	}
 
 	public TiledTextureRegion getRegCat() {
-		return regCat.deepCopy();
+		return regCat;
 	}
 
 	public void onCreateScene(Scene scene) {

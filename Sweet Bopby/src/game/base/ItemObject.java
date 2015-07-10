@@ -13,6 +13,10 @@ public class ItemObject {
 	// type = -1 0 1 2 3 4 5 6 7 8
 	private int type = -1;
 
+	public AnimatedSprite getBackgroud() {
+		return backgroud;
+	}
+
 	public Point getPosition() {
 		return position;
 	}
@@ -43,8 +47,20 @@ public class ItemObject {
 
 	public void randomType(Scene scene, int type, BaseMSprise[] bigs) {
 		this.type = type;
-		sprite = new AnimatedSprite(backgroud.getX(), backgroud.getY(), bigs[type - 1].getRegCat());
+
+		int index = type;
+		if (index >= 10)
+			index = index / 10;
+		removeSprite(scene);
+		sprite = new AnimatedSprite(backgroud.getX(), backgroud.getY(), bigs[index - 1].getRegCat().deepCopy());
 		scene.attachChild(sprite);
+		runAnimation(false);
+	}
+
+	public void removeSprite(Scene scene) {
+		if (sprite != null) {
+			scene.detachChild(sprite);
+		}
 	}
 
 	public boolean isSelected(int x, int y) {
@@ -94,5 +110,13 @@ public class ItemObject {
 
 	public void setType(int type2) {
 		type = type2;
+	}
+
+	public void toBig(Scene getmMainScene, BaseMSprise[] bigs) {
+		if (getType() >= 10) {
+			setType(getType() / 10);
+		}
+
+		runAnimation(false);
 	}
 }

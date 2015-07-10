@@ -1,19 +1,19 @@
 package org.vnp.sweetbopby.utils;
 
+import game.base.ItemObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import game.base.ItemObject;
-
 public class SweetUtils {
 
-	public static final int ROWS = 8;
-	public static final int COLUMNS = 8;
+	public static final int ROWS = 9;
+	public static final int COLUMNS = 9;
 
 	public static class Way {
-		public Way(ItemObject parent, ItemObject it) {
+		public Way(Way parent, ItemObject it) {
 			this.it = it;
 			this.parent = parent;
 		}
@@ -22,12 +22,12 @@ public class SweetUtils {
 			return it;
 		}
 
-		public ItemObject getParent() {
+		public Way getParent() {
 			return parent;
 		}
 
 		private ItemObject it;
-		private ItemObject parent;
+		private Way parent;
 	}
 
 	public static Way findway(ItemObject itemChecked, ItemObject itemSelected, ItemObject[][] boards) {
@@ -48,7 +48,7 @@ public class SweetUtils {
 			// x, y +1
 			if (y < COLUMNS - 1) {
 				ItemObject it = boards[x][y + 1];
-				Way way = new Way(item.getIt(), it);
+				Way way = new Way(item, it);
 
 				if (it == itemSelected) {
 					return way;
@@ -61,7 +61,7 @@ public class SweetUtils {
 			// x , y-1
 			if (y > 0) {
 				ItemObject it = boards[x][y - 1];
-				Way way = new Way(item.getIt(), it);
+				Way way = new Way(item, it);
 
 				if (it == itemSelected) {
 					return way;
@@ -74,7 +74,7 @@ public class SweetUtils {
 			// x -1, y
 			if (x > 0) {
 				ItemObject it = boards[x - 1][y];
-				Way way = new Way(item.getIt(), it);
+				Way way = new Way(item, it);
 
 				if (it == itemSelected) {
 					return way;
@@ -87,7 +87,7 @@ public class SweetUtils {
 			// x+ 1, y
 			if (x < ROWS - 1) {
 				ItemObject it = boards[x + 1][y];
-				Way way = new Way(item.getIt(), it);
+				Way way = new Way(item, it);
 
 				if (it == itemSelected) {
 					return way;

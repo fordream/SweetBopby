@@ -22,7 +22,7 @@ import android.os.Message;
 public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise baseSprise = new BaseMSprise();
 	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
-
+	private BaseMSprise mBoard = new BaseMSprise();
 	private BaseMSprise[] bigs = new BaseMSprise[8];
 	private BaseMSprise[] smalls = new BaseMSprise[8];
 
@@ -402,7 +402,7 @@ public class MainActivity extends BaseMGameActivty {
 			smalls[i].onCreateResources(mEngine, this, (i + 1) + "_small.png", 1, 1);
 			bigs[i].onCreateResources(mEngine, this, (i + 1) + "_x.png", 2, 1);
 		}
-
+		mBoard.onCreateResources(mEngine, this, "bongs.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
 	}
 
@@ -411,6 +411,7 @@ public class MainActivity extends BaseMGameActivty {
 		Scene scene = super.onLoadScene();
 		baseSprise.onCreateScene(getmMainScene());
 		line.onCreateScene(getmMainScene());
+		mBoard.onCreateScene(getmMainScene());
 		return scene;
 	}
 }

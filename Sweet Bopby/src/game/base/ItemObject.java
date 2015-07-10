@@ -37,30 +37,23 @@ public class ItemObject {
 	public void clear(Scene scene) {
 		type = -1;
 		isChecked = false;
-		// backgroud.animate(0);
 		if (sprite != null) {
-			scene.detachChild(sprite);
+			sprite.setCurrentTileIndex(3, 1);
 		}
-		sprite = null;
-		runAnimation(false);
+		update(scene);
 	}
 
-	public void randomType(Scene scene, int type, BaseMSprise[] bigs) {
+	public void randomType(Scene scene, int type, BaseMSprise bigs) {
 		this.type = type;
 
 		int index = type;
 		if (index >= 10)
 			index = index / 10;
-		removeSprite(scene);
-		sprite = new AnimatedSprite(backgroud.getX(), backgroud.getY(), bigs[index - 1].getRegCat().deepCopy());
-		scene.attachChild(sprite);
-		runAnimation(false);
-	}
-
-	public void removeSprite(Scene scene) {
-		if (sprite != null) {
-			scene.detachChild(sprite);
+		if (sprite == null) {
+			sprite = new AnimatedSprite(backgroud.getX(), backgroud.getY(), bigs.getRegCat().deepCopy());
+			scene.attachChild(sprite);
 		}
+		update(scene);
 	}
 
 	public boolean isSelected(int x, int y) {
@@ -70,31 +63,6 @@ public class ItemObject {
 	public void setChecked(boolean isChecked) {
 		if (isBig()) {
 			this.isChecked = isChecked;
-		}
-	}
-
-	public void runAnimation(boolean isRun) {
-		// FIXME
-		// run animation selected
-		if (isChecked()) {
-			if (isBig()) {
-				// backgroud.animate(100);
-				if (sprite != null)
-					sprite.animate(200);
-			}
-		} else {
-			// backgroud.stopAnimation();
-			// backgroud.setCurrentTileIndex(0);
-
-			if (sprite != null) {
-				sprite.stopAnimation();
-
-				if (isBig()) {
-					sprite.setCurrentTileIndex(0);
-				} else {
-					sprite.setCurrentTileIndex(1);
-				}
-			}
 		}
 	}
 
@@ -112,11 +80,32 @@ public class ItemObject {
 		type = type2;
 	}
 
-	public void toBig(Scene getmMainScene, BaseMSprise[] bigs) {
+	public void toBig(Scene getmMainScene, BaseMSprise bigs) {
 		if (getType() >= 10) {
 			setType(getType() / 10);
 		}
 
-		runAnimation(false);
+		update(getmMainScene);
+	}
+
+	public void update(Scene getmMainScene) {
+		if (sprite != null) {
+			if (getType() == -1) {
+				sprite.stopAnimation();
+				sprite.setCurrentTileIndex(2, 0);
+			} else if (isBig()) {
+				if (isChecked()) {
+					sprite.setCurrentTileIndex(1, getType());
+					sprite.animate(new long[] { 100, 100, 100 }, (getType() - 1) * 3, (getType() - 1) * 3 + 2, true);
+				} else {
+					sprite.stopAnimation();
+					sprite.setCurrentTileIndex(0, getType());
+				}
+
+			} else {
+				sprite.stopAnimation();
+				sprite.setCurrentTileIndex(1, getType() / 10 - 1);
+			}
+		}
 	}
 }

@@ -23,9 +23,6 @@ public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise baseSprise = new BaseMSprise();
 	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
 	private BaseMSprise mBoard = new BaseMSprise();
-	private BaseMSprise[] bigs = new BaseMSprise[8];
-	private BaseMSprise[] smalls = new BaseMSprise[8];
-
 	private BaseMSprise line = new BaseMSprise();
 
 	@Override
@@ -36,11 +33,6 @@ public class MainActivity extends BaseMGameActivty {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j] = new ItemObject();
 			}
-		}
-
-		for (int i = 0; i < 8; i++) {
-			smalls[i] = new BaseMSprise();
-			bigs[i] = new BaseMSprise();
 		}
 	}
 
@@ -57,17 +49,17 @@ public class MainActivity extends BaseMGameActivty {
 			if (itemChecked == null) {
 				if (selected != null) {
 					selected.setChecked(true);
-					selected.runAnimation(true);
+					selected.update(getmMainScene());
 				}
 			} else if (selected != null) {
 				if (selected == itemChecked) {
 					selected.setChecked(false);
-					selected.runAnimation(false);
+					selected.update(getmMainScene());
 				} else if (!selected.isBig()) {
 					// FIXME find way
 					Way way = SweetUtils.findway(itemChecked, selected, boards);
 					if (way != null) {
-						selected.randomType(getmMainScene(), itemChecked.getType(), bigs);
+						selected.randomType(getmMainScene(), itemChecked.getType(), mBoard);
 						itemChecked.clear(getmMainScene());
 
 						Way item = way;
@@ -92,7 +84,7 @@ public class MainActivity extends BaseMGameActivty {
 						if (eat.size() > 0) {
 							for (ItemObject mitem : eat) {
 								mitem.setType(-1);
-								mitem.removeSprite(getmMainScene());
+								mitem.update(getmMainScene());
 							}
 							// clear ball ear
 						} else {
@@ -291,15 +283,8 @@ public class MainActivity extends BaseMGameActivty {
 					}
 				}
 			});
-
 		}
 	};
-
-	private void remove(List<AnimatedSprite> list) {
-		Message message = new Message();
-		message.obj = list;
-		handler.sendMessageAtTime(message, 300);
-	}
 
 	private ItemObject getItemChecked() {
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
@@ -344,7 +329,7 @@ public class MainActivity extends BaseMGameActivty {
 		List<ItemObject> items = new ArrayList<ItemObject>();
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
-				boards[i][j].toBig(getmMainScene(), bigs);
+				boards[i][j].toBig(getmMainScene(), mBoard);
 
 				if (boards[i][j].getType() == -1) {
 					items.add(boards[i][j]);
@@ -356,19 +341,19 @@ public class MainActivity extends BaseMGameActivty {
 		if (items.size() > 0) {
 			int index = random.nextInt(items.size());
 			ItemObject object = items.get(index);
-			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, bigs);
+			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, mBoard);
 			items.remove(object);
 		}
 		if (items.size() > 0) {
 			int index = random.nextInt(items.size());
 			ItemObject object = items.get(index);
-			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, bigs);
+			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, mBoard);
 			items.remove(object);
 		}
 		if (items.size() > 0) {
 			int index = random.nextInt(items.size());
 			ItemObject object = items.get(index);
-			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, bigs);
+			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, mBoard);
 			items.remove(object);
 		}
 	}
@@ -389,7 +374,7 @@ public class MainActivity extends BaseMGameActivty {
 			if (boards[px][py].getType() != -1) {
 				i--;
 			} else {
-				boards[px][py].randomType(getmMainScene(), random.nextInt(8) + 1, bigs);
+				boards[px][py].randomType(getmMainScene(), random.nextInt(8) + 1, mBoard);
 			}
 		}
 	}
@@ -398,10 +383,9 @@ public class MainActivity extends BaseMGameActivty {
 	public void onLoadResources() {
 		super.onLoadResources();
 		baseSprise.onCreateResources(mEngine, this, "mbg.png", 2, 1);
-		for (int i = 0; i < 8; i++) {
-			smalls[i].onCreateResources(mEngine, this, (i + 1) + "_small.png", 1, 1);
-			bigs[i].onCreateResources(mEngine, this, (i + 1) + "_x.png", 2, 1);
-		}
+		// for (int i = 0; i < 8; i++) {
+		// bigs[i].onCreateResources(mEngine, this, (i + 1) + "_x.png", 2, 1);
+		// }
 		mBoard.onCreateResources(mEngine, this, "bongs.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
 	}

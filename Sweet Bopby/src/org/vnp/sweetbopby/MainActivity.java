@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Message;
 
 public class MainActivity extends BaseMGameActivty {
+	private BaseMSprise bg = new BaseMSprise();
 	private BaseMSprise baseSprise = new BaseMSprise();
 	private BaseMSprise newGame = new BaseMSprise();
 	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
@@ -304,6 +305,7 @@ public class MainActivity extends BaseMGameActivty {
 
 	@Override
 	public void onLoadComplete() {
+		getmMainScene().attachChild(bg.getSprCat());
 		TiledTextureRegion region = baseSprise.getRegCat();
 		int with = region.getWidth() / 2;
 		int height = region.getHeight();
@@ -392,6 +394,7 @@ public class MainActivity extends BaseMGameActivty {
 		mBoard.onCreateResources(mEngine, this, "bongs.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
 		newGame.onCreateResources(getEngine(), this, "new_game.png", 2, 1);
+		bg.onCreateResources(getEngine(), this, new Random().nextInt(100) < 50 ? "bg1.png" : "bg2.png", 1, 1);
 	}
 
 	@Override
@@ -401,6 +404,7 @@ public class MainActivity extends BaseMGameActivty {
 		line.onCreateScene(getmMainScene());
 		mBoard.onCreateScene(getmMainScene());
 		newGame.onCreateScene(getmMainScene());
+		bg.onCreateScene(getmMainScene());
 		return scene;
 	}
 }

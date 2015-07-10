@@ -391,7 +391,7 @@ public class MainActivity extends BaseMGameActivty {
 		// for (int i = 0; i < 8; i++) {
 		// bigs[i].onCreateResources(mEngine, this, (i + 1) + "_x.png", 2, 1);
 		// }
-		mBoard.onCreateResources(mEngine, this, "bongs.png", 3, 8);
+		mBoard.onCreateResources(mEngine, this, "bong1s.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
 		newGame.onCreateResources(getEngine(), this, "new_game.png", 2, 1);
 		bg.onCreateResources(getEngine(), this, new Random().nextInt(100) < 50 ? "bg1.png" : "bg2.png", 1, 1);

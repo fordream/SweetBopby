@@ -3,8 +3,10 @@ package game.base;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+import org.vnp.sweetbopby.utils.SweetUtils;
 
 import android.graphics.Point;
+import android.os.Handler;
 
 public class ItemObject {
 	private Point position = new Point();
@@ -23,6 +25,21 @@ public class ItemObject {
 
 	public int getType() {
 		return type;
+	}
+
+	private Handler handler = new Handler() {
+		public void dispatchMessage(android.os.Message msg) {
+			way(false);
+		};
+	};
+
+	public void way(boolean isWay) {
+		if (backgroud != null) {
+			backgroud.setCurrentTileIndex(isWay ? 1 : 0);
+			if (isWay) {
+				handler.sendEmptyMessageAtTime(0, 300);
+			}
+		}
 	}
 
 	public void create(Scene scene, int left, int top, int positionx, int positionY, TiledTextureRegion region) {
@@ -73,7 +90,7 @@ public class ItemObject {
 	}
 
 	public boolean isBig() {
-		return type <= 8 && type >= 0;
+		return type <= SweetUtils.MAXTYPEBALL && type >= 0;
 	}
 
 	public void setType(int type2) {
@@ -87,7 +104,7 @@ public class ItemObject {
 
 		update(getmMainScene);
 	}
-	
+
 	public void update(Scene getmMainScene) {
 		if (sprite != null) {
 			if (getType() == -1) {

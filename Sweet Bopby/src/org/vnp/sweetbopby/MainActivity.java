@@ -15,6 +15,8 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.vnp.sweetbopby.utils.SweetUtils;
 import org.vnp.sweetbopby.utils.SweetUtils.Way;
 
+import com.vnp.core.common.CommonAndroid;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -66,17 +68,10 @@ public class MainActivity extends BaseMGameActivty {
 
 						// List<AnimatedSprite> list = new
 						// ArrayList<AnimatedSprite>();
-						// do {
-						// AnimatedSprite bacground =
-						// item.getIt().getBackgroud();
-						// AnimatedSprite sprite = new
-						// AnimatedSprite(bacground.getX(), bacground.getY(),
-						// line.getRegCat().deepCopy());
-						// getmMainScene().attachChild(sprite);
-						// list.add(sprite);
-						// item = item.getParent();
-						// } while (item.getParent() != null);
-						// remove(list);
+						do {
+							item.getIt().way(true);
+							item = item.getParent();
+						} while (item.getParent() != null);
 
 						// FIXME
 						// check an hay khong
@@ -92,7 +87,6 @@ public class MainActivity extends BaseMGameActivty {
 						}
 
 						// neu khong an --> nho thanh to
-
 						// add diem
 
 						//
@@ -327,6 +321,7 @@ public class MainActivity extends BaseMGameActivty {
 
 	private void randomNext() {
 		List<ItemObject> items = new ArrayList<ItemObject>();
+
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].toBig(getmMainScene(), mBoard);
@@ -337,23 +332,28 @@ public class MainActivity extends BaseMGameActivty {
 			}
 		}
 
+		if (items.size() <= 1) {
+			CommonAndroid.showDialog(this, "end game", null);
+			return;
+		}
+
 		Random random = new Random();
 		if (items.size() > 0) {
 			int index = random.nextInt(items.size());
 			ItemObject object = items.get(index);
-			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, mBoard);
+			object.randomType(getmMainScene(), (random.nextInt(SweetUtils.MAXTYPEBALL) + 1) * 10, mBoard);
 			items.remove(object);
 		}
 		if (items.size() > 0) {
 			int index = random.nextInt(items.size());
 			ItemObject object = items.get(index);
-			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, mBoard);
+			object.randomType(getmMainScene(), (random.nextInt(SweetUtils.MAXTYPEBALL) + 1) * 10, mBoard);
 			items.remove(object);
 		}
 		if (items.size() > 0) {
 			int index = random.nextInt(items.size());
 			ItemObject object = items.get(index);
-			object.randomType(getmMainScene(), (random.nextInt(8) + 1) * 10, mBoard);
+			object.randomType(getmMainScene(), (random.nextInt(SweetUtils.MAXTYPEBALL) + 1) * 10, mBoard);
 			items.remove(object);
 		}
 	}
@@ -374,7 +374,7 @@ public class MainActivity extends BaseMGameActivty {
 			if (boards[px][py].getType() != -1) {
 				i--;
 			} else {
-				boards[px][py].randomType(getmMainScene(), random.nextInt(8) + 1, mBoard);
+				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
 			}
 		}
 	}

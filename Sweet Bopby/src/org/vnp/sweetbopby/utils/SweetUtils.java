@@ -12,7 +12,7 @@ public class SweetUtils {
 
 	public static final int ROWS = 9;
 	public static final int COLUMNS = 9;
-	public static final int MAXTYPEBALL = 8;
+	public static final int MAXTYPEBALL = 5;
 
 	public static class Way {
 		public Way(Way parent, ItemObject it) {

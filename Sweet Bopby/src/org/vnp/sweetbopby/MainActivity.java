@@ -32,7 +32,7 @@ public class MainActivity extends BaseMGameActivty {
 	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
 	private BaseMSprise mBoard = new BaseMSprise();
 	private BaseMSprise line = new BaseMSprise();
-
+	private BaseMSprise gameover = new BaseMSprise();
 	private FontObject scoreText = new FontObject();
 	private FontObject scoreNumber = new FontObject();
 	private FontObject highText = new FontObject();
@@ -66,8 +66,12 @@ public class MainActivity extends BaseMGameActivty {
 			if (selected == null) {
 
 				if (SweetUtils.isClickBy(newGame, x, y)) {
-					CommonAndroid.showDialog(this, "new game", null);
+					createNewGame();
 				}
+				return true;
+			}
+
+			if (gameover.getSprCat().isVisible()) {
 				return true;
 			}
 			if (itemChecked == null) {
@@ -341,6 +345,8 @@ public class MainActivity extends BaseMGameActivty {
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].create(getmMainScene(), left, top, i, j, region);
+
+				boards[i][j].randomType(getmMainScene(), -1, mBoard);
 			}
 		}
 
@@ -375,6 +381,9 @@ public class MainActivity extends BaseMGameActivty {
 		highNumber.attachChild(getmMainScene());
 		highNumber.setText(getMaxScore() + "");
 
+		gameover.getSprCat().setPosition((getmCamera().getWidth() - gameover.getSprCat().getWidth()) / 2, (getmCamera().getHeight() - gameover.getSprCat().getHeight()) / 2);
+		getmMainScene().attachChild(gameover.getSprCat(), 30);
+
 		createNewGame();
 	}
 
@@ -405,6 +414,7 @@ public class MainActivity extends BaseMGameActivty {
 			// CommonAndroid.showDialog(this, "end game", null);
 			setMaxScore(score);
 			updateMaxScore();
+			gameover.getSprCat().setVisible(true);
 			// FIXME
 			return;
 		}
@@ -435,7 +445,7 @@ public class MainActivity extends BaseMGameActivty {
 	}
 
 	public void createNewGame() {
-
+		gameover.getSprCat().setVisible(false);
 		score = 0;
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
@@ -477,6 +487,7 @@ public class MainActivity extends BaseMGameActivty {
 		scoreNumber.onLoadResources(getEngine());
 		highText.onLoadResources(getEngine());
 		highNumber.onLoadResources(getEngine());
+		gameover.onCreateResources(getEngine(), this, "gameover.png", 1, 1);
 		menuSprise.onCreateResources(getEngine(), this, "menu_score.png", 1, 1);
 	}
 
@@ -494,6 +505,7 @@ public class MainActivity extends BaseMGameActivty {
 		highText.onLoadScene(getmCamera());
 		highNumber.onLoadScene(getmCamera());
 		menuSprise.onloadSucess(getmMainScene());
+		gameover.onCreateScene(getmMainScene());
 		return scene;
 	}
 }

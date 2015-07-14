@@ -2,6 +2,7 @@ package org.vnp.sweetbopby;
 
 import game.base.BaseMGameActivty;
 import game.base.BaseMSprise;
+import game.base.FontObject;
 import game.base.ItemObject;
 
 import java.util.ArrayList;
@@ -15,24 +16,32 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.vnp.sweetbopby.utils.SweetUtils;
 import org.vnp.sweetbopby.utils.SweetUtils.Way;
 
-import com.vnp.core.common.CommonAndroid;
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.acv.cheerz.db.DataStore;
+import com.vnp.core.common.LogUtils;
+
 public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise bg = new BaseMSprise();
 	private BaseMSprise baseSprise = new BaseMSprise();
+	private BaseMSprise menuSprise = new BaseMSprise();
 	private BaseMSprise newGame = new BaseMSprise();
 	private ItemObject[][] boards = new ItemObject[SweetUtils.ROWS][SweetUtils.COLUMNS];
 	private BaseMSprise mBoard = new BaseMSprise();
 	private BaseMSprise line = new BaseMSprise();
 
+	private FontObject scoreText = new FontObject();
+	private FontObject scoreNumber = new FontObject();
+	private FontObject highText = new FontObject();
+	private FontObject highNumber = new FontObject();
+	private FontObject nextText = new FontObject();
+
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
 		super.onCreate(pSavedInstanceState);
-
+		DataStore.getInstance().init(this);
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j] = new ItemObject();
@@ -40,9 +49,13 @@ public class MainActivity extends BaseMGameActivty {
 		}
 	}
 
+	private int score = 0;
+
 	@Override
 	public boolean onSceneTouchEvent(Scene mScene, TouchEvent arg1) {
 		if (arg1.getAction() == TouchEvent.ACTION_DOWN) {
+			
+			LogUtils.e("AAAAAAAAAAAAAAX","action");
 			int x = (int) arg1.getX();
 			int y = (int) arg1.getY();
 			// null or not null
@@ -78,6 +91,9 @@ public class MainActivity extends BaseMGameActivty {
 						// check an hay khong
 						List<ItemObject> eat = checkEat(selected);
 						if (eat.size() > 0) {
+							score = score + eat.size() * 2;
+							updateScore();
+
 							for (ItemObject mitem : eat) {
 								mitem.setType(-1);
 								mitem.update(getmMainScene());
@@ -305,25 +321,64 @@ public class MainActivity extends BaseMGameActivty {
 
 	@Override
 	public void onLoadComplete() {
+		AnimatedSprite newGame = this.newGame.getSprCat();
 		getmMainScene().attachChild(bg.getSprCat());
 		TiledTextureRegion region = baseSprise.getRegCat();
 		int with = region.getWidth() / 2;
 		int height = region.getHeight();
 		int top = ((int) getmCamera().getHeight() - height * SweetUtils.ROWS) / 2;
-		
-		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS) - top;
-		
 
+		// int left = ((int) getmCamera().getWidth() - with *
+		// SweetUtils.COLUMNS) - top;
+		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS - (int)newGame.getWidth() / 2 - 15);
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].create(getmMainScene(), left, top, i, j, region);
 			}
 		}
-		AnimatedSprite newGame = this.newGame.getSprCat();
+
 		getmMainScene().attachChild(newGame);
 		newGame.animate(200);
 		newGame.setPosition(left / 2 - newGame.getWidth() / 2, top);
+
+		int mLeft = (int) (left / 2 - newGame.getWidth() / 2);
+		nextText.setText("Next");
+		scoreText.setText("Score");
+		scoreNumber.setText("0");
+		highText.setText("High Score");
+		highNumber.setText("0");
+
+		scoreText.setPosition(mLeft, top + 100);
+		scoreNumber.setPosition(mLeft + 5, top + 150);
+
+		AnimatedSprite menu1 = new AnimatedSprite(mLeft, top + 145, menuSprise.getRegCat().deepCopy());
+		getmMainScene().attachChild(menu1);
+
+		// nextText.setPosition(mLeft, top + 200);
+
+		highText.setPosition(mLeft, top + 250);
+		highNumber.setPosition(mLeft + 5, top + 300);
+		AnimatedSprite menu2 = new AnimatedSprite(mLeft, top + 295, menuSprise.getRegCat().deepCopy());
+		getmMainScene().attachChild(menu2);
+
+		// nextText.attachChild(getmMainScene());
+		scoreText.attachChild(getmMainScene());
+		scoreNumber.attachChild(getmMainScene());
+		highText.attachChild(getmMainScene());
+		highNumber.attachChild(getmMainScene());
+		highNumber.setText(getMaxScore() + "");
+
 		createNewGame();
+	}
+
+	private int getMaxScore() {
+		return DataStore.getInstance().get("highscore", 0);
+	}
+
+	public void setMaxScore(int hightScore) {
+		if (hightScore > getMaxScore()) {
+			DataStore.getInstance().save("highscore", hightScore);
+		}
 	}
 
 	private void randomNext() {
@@ -340,7 +395,10 @@ public class MainActivity extends BaseMGameActivty {
 		}
 
 		if (items.size() <= 1) {
-			CommonAndroid.showDialog(this, "end game", null);
+			// CommonAndroid.showDialog(this, "end game", null);
+			setMaxScore(score);
+			updateMaxScore();
+			// FIXME
 			return;
 		}
 
@@ -365,7 +423,13 @@ public class MainActivity extends BaseMGameActivty {
 		}
 	}
 
+	private void updateMaxScore() {
+		highNumber.setText(getMaxScore() + "");
+	}
+
 	public void createNewGame() {
+
+		score = 0;
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].clear(getmMainScene());
@@ -384,19 +448,29 @@ public class MainActivity extends BaseMGameActivty {
 				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
 			}
 		}
+
+		updateScore();
+	}
+
+	private void updateScore() {
+		scoreNumber.setText(score + "");
 	}
 
 	@Override
 	public void onLoadResources() {
 		super.onLoadResources();
 		baseSprise.onCreateResources(mEngine, this, "mbg.png", 2, 1);
-		// for (int i = 0; i < 8; i++) {
-		// bigs[i].onCreateResources(mEngine, this, (i + 1) + "_x.png", 2, 1);
-		// }
 		mBoard.onCreateResources(mEngine, this, "bong1s.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
 		newGame.onCreateResources(getEngine(), this, "new_game.png", 2, 1);
 		bg.onCreateResources(getEngine(), this, new Random().nextInt(100) < 50 ? "bg1.png" : "bg2.png", 1, 1);
+
+		nextText.onLoadResources(getEngine());
+		scoreText.onLoadResources(getEngine());
+		scoreNumber.onLoadResources(getEngine());
+		highText.onLoadResources(getEngine());
+		highNumber.onLoadResources(getEngine());
+		menuSprise.onCreateResources(getEngine(), this, "menu_score.png", 1, 1);
 	}
 
 	@Override
@@ -407,6 +481,12 @@ public class MainActivity extends BaseMGameActivty {
 		mBoard.onCreateScene(getmMainScene());
 		newGame.onCreateScene(getmMainScene());
 		bg.onCreateScene(getmMainScene());
+		nextText.onLoadScene(getmCamera());
+		scoreText.onLoadScene(getmCamera());
+		scoreNumber.onLoadScene(getmCamera());
+		highText.onLoadScene(getmCamera());
+		highNumber.onLoadScene(getmCamera());
+		menuSprise.onloadSucess(getmMainScene());
 		return scene;
 	}
 }

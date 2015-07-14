@@ -345,7 +345,6 @@ public class MainActivity extends BaseMGameActivty {
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].create(getmMainScene(), left, top, i, j, region);
-
 				boards[i][j].randomType(getmMainScene(), -1, mBoard);
 			}
 		}
@@ -403,6 +402,11 @@ public class MainActivity extends BaseMGameActivty {
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].toBig(getmMainScene(), mBoard);
+			}
+		}
+
+		for (int i = 0; i < SweetUtils.ROWS; i++) {
+			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 
 				if (boards[i][j].getType() == -1) {
 					items.add(boards[i][j]);

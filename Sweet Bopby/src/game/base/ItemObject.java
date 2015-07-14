@@ -74,7 +74,7 @@ public class ItemObject {
 	}
 
 	public boolean isSelected(int x, int y) {
-		return backgroud.getX() < x && x < (backgroud.getX() + backgroud.getWidth() / 2) && backgroud.getY() < y && y < (backgroud.getY() + backgroud.getHeight());
+		return backgroud.getX() < x && x < (backgroud.getX() + backgroud.getWidth()) && backgroud.getY() < y && y < (backgroud.getY() + backgroud.getHeight());
 	}
 
 	public void setChecked(boolean isChecked) {

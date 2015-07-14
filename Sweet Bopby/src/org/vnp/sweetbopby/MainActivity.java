@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.acv.cheerz.db.DataStore;
+import com.vnp.core.common.CommonAndroid;
 import com.vnp.core.common.LogUtils;
 
 public class MainActivity extends BaseMGameActivty {
@@ -54,14 +55,21 @@ public class MainActivity extends BaseMGameActivty {
 	@Override
 	public boolean onSceneTouchEvent(Scene mScene, TouchEvent arg1) {
 		if (arg1.getAction() == TouchEvent.ACTION_DOWN) {
-			
-			LogUtils.e("AAAAAAAAAAAAAAX","action");
+
 			int x = (int) arg1.getX();
 			int y = (int) arg1.getY();
+
 			// null or not null
 			ItemObject selected = getItemSlected(x, y);
 			// null or not null
 			ItemObject itemChecked = getItemChecked();
+			if (selected == null) {
+
+				if (SweetUtils.isClickBy(newGame, x, y)) {
+					CommonAndroid.showDialog(this, "new game", null);
+				}
+				return true;
+			}
 			if (itemChecked == null) {
 				if (selected != null) {
 					selected.setChecked(true);
@@ -112,7 +120,7 @@ public class MainActivity extends BaseMGameActivty {
 			}
 		}
 
-		return false;
+		return true;
 	}
 
 	private List<ItemObject> checkEat(ItemObject selected) {
@@ -309,6 +317,7 @@ public class MainActivity extends BaseMGameActivty {
 	}
 
 	private ItemObject getItemSlected(int x, int y) {
+		LogUtils.e("ASXZ", "test " + x + " " + y);
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				if (boards[i][j].isSelected(x, y)) {
@@ -328,9 +337,7 @@ public class MainActivity extends BaseMGameActivty {
 		int height = region.getHeight();
 		int top = ((int) getmCamera().getHeight() - height * SweetUtils.ROWS) / 2;
 
-		// int left = ((int) getmCamera().getWidth() - with *
-		// SweetUtils.COLUMNS) - top;
-		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS - (int)newGame.getWidth() / 2 - 15);
+		int left = ((int) getmCamera().getWidth() - with * SweetUtils.COLUMNS - (int) newGame.getWidth() / 2 - 15);
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].create(getmMainScene(), left, top, i, j, region);
@@ -339,7 +346,7 @@ public class MainActivity extends BaseMGameActivty {
 
 		getmMainScene().attachChild(newGame);
 		newGame.animate(200);
-		newGame.setPosition(left / 2 - newGame.getWidth() / 2, top);
+		newGame.setPosition(left / 2 - newGame.getWidth() / 2, top + 50);
 
 		int mLeft = (int) (left / 2 - newGame.getWidth() / 2);
 		nextText.setText("Next");
@@ -356,9 +363,9 @@ public class MainActivity extends BaseMGameActivty {
 
 		// nextText.setPosition(mLeft, top + 200);
 
-		highText.setPosition(mLeft, top + 250);
-		highNumber.setPosition(mLeft + 5, top + 300);
-		AnimatedSprite menu2 = new AnimatedSprite(mLeft, top + 295, menuSprise.getRegCat().deepCopy());
+		highText.setPosition(mLeft, top + 450);
+		highNumber.setPosition(mLeft + 5, top + 500);
+		AnimatedSprite menu2 = new AnimatedSprite(mLeft, top + 495, menuSprise.getRegCat().deepCopy());
 		getmMainScene().attachChild(menu2);
 
 		// nextText.attachChild(getmMainScene());
@@ -460,7 +467,7 @@ public class MainActivity extends BaseMGameActivty {
 	public void onLoadResources() {
 		super.onLoadResources();
 		baseSprise.onCreateResources(mEngine, this, "mbg.png", 2, 1);
-		mBoard.onCreateResources(mEngine, this, "bong1s.png", 3, 8);
+		mBoard.onCreateResources(mEngine, this, "bong1s1.png", 3, 8);
 		line.onCreateResources(mEngine, this, "line.png", 1, 1);
 		newGame.onCreateResources(getEngine(), this, "new_game.png", 2, 1);
 		bg.onCreateResources(getEngine(), this, new Random().nextInt(100) < 50 ? "bg1.png" : "bg2.png", 1, 1);

@@ -1,5 +1,6 @@
 package org.vnp.sweetbopby.utils;
 
+import game.base.BaseMSprise;
 import game.base.ItemObject;
 
 import java.util.ArrayList;
@@ -102,5 +103,10 @@ public class SweetUtils {
 		}
 
 		return null;
+	}
+
+	public static boolean isClickBy(BaseMSprise newGame, int x, int y) {
+		return newGame.getSprCat().getX() < x && x < newGame.getSprCat().getX() + newGame.getSprCat().getWidth() &&
+				newGame.getSprCat().getY() < y && y< newGame.getSprCat().getY() + newGame.getSprCat().getHeight();
 	}
 }

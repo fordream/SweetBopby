@@ -37,7 +37,7 @@ public class ItemObject {
 		if (backgroud != null) {
 			backgroud.setCurrentTileIndex(isWay ? 1 : 0);
 			if (isWay) {
-				handler.sendEmptyMessageAtTime(0, 300);
+				handler.sendEmptyMessageAtTime(0, 500);
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package org.vnp.sweetbopby;
 
 import game.base.BaseMGameActivty;
 import game.base.BaseMSprise;
+import game.base.BaseMusic;
 import game.base.FontObject;
 import game.base.ItemObject;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.input.touch.TouchEvent;
@@ -16,6 +18,7 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.vnp.sweetbopby.utils.SweetUtils;
 import org.vnp.sweetbopby.utils.SweetUtils.Way;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +41,37 @@ public class MainActivity extends BaseMGameActivty {
 	private FontObject highText = new FontObject();
 	private FontObject highNumber = new FontObject();
 	private FontObject nextText = new FontObject();
+
+	private BaseMusic musicMove = new BaseMusic() {
+
+		@Override
+		public void onLoadResources(Engine mEngine, Context context) {
+			onLoadResources(false, getEngine(), context, "move.mp3", false);
+		}
+	};
+
+	private BaseMusic musicEat = new BaseMusic() {
+
+		@Override
+		public void onLoadResources(Engine mEngine, Context context) {
+			onLoadResources(false, getEngine(), MainActivity.this, "explode.mp3", false);
+		}
+	};
+
+	private BaseMusic musicLost = new BaseMusic() {
+
+		@Override
+		public void onLoadResources(Engine mEngine, Context context) {
+			onLoadResources(false, getEngine(), MainActivity.this, "explode.mp3", false);
+		}
+	};
+	private BaseMusic musicBackground = new BaseMusic() {
+
+		@Override
+		public void onLoadResources(Engine mEngine, Context context) {
+			onLoadResources(true, getEngine(), MainActivity.this, "background.wav", true);
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle pSavedInstanceState) {
@@ -87,6 +121,7 @@ public class MainActivity extends BaseMGameActivty {
 					// FIXME find way
 					Way way = SweetUtils.findway(itemChecked, selected, boards);
 					if (way != null) {
+						// musicMove.play();
 						selected.randomType(getmMainScene(), itemChecked.getType(), mBoard);
 						itemChecked.clear(getmMainScene());
 
@@ -122,6 +157,7 @@ public class MainActivity extends BaseMGameActivty {
 						}
 
 						if (eat.size() > 0) {
+							musicEat.play();
 							score = score + eat.size() * 2;
 							updateScore();
 
@@ -131,14 +167,9 @@ public class MainActivity extends BaseMGameActivty {
 							}
 							// clear ball ear
 						} else {
-							// check an when phon to
 							randomNext();
 						}
 
-						// neu khong an --> nho thanh to
-						// add diem
-
-						//
 					}
 				}
 			}
@@ -403,6 +434,20 @@ public class MainActivity extends BaseMGameActivty {
 		getmMainScene().attachChild(gameover.getSprCat(), 100);
 
 		createNewGame();
+		
+		musicBackground.play();
+	}
+	
+	@Override
+	public void onPauseGame() {
+		super.onPauseGame();
+		musicBackground.pause();
+	}
+	
+	@Override
+	public void onResumeGame() {
+		super.onResumeGame();
+		musicBackground.play();
 	}
 
 	private int getMaxScore() {
@@ -519,6 +564,10 @@ public class MainActivity extends BaseMGameActivty {
 		highNumber.onLoadResources(getEngine());
 		gameover.onCreateResources(getEngine(), this, "gameover.png", 1, 1);
 		menuSprise.onCreateResources(getEngine(), this, "menu_score.png", 1, 1);
+
+		musicMove.onLoadResources(getEngine(), this);
+		musicEat.onLoadResources(mEngine, this);
+		musicBackground.onLoadResources(getEngine(), this);
 	}
 
 	@Override
@@ -536,6 +585,7 @@ public class MainActivity extends BaseMGameActivty {
 		highNumber.onLoadScene(getmCamera());
 		menuSprise.onloadSucess(getmMainScene());
 		gameover.onCreateScene(getmMainScene());
+
 		return scene;
 	}
 }

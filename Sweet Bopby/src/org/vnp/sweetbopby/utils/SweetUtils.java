@@ -33,70 +33,78 @@ public class SweetUtils {
 	}
 
 	public static Way findway(ItemObject itemChecked, ItemObject itemSelected, ItemObject[][] boards) {
-		List<Way> ques = new ArrayList<Way>();
+		List<Way> quesx = new ArrayList<Way>();
 		Map<ItemObject, String> danhdau = new HashMap<ItemObject, String>();
 
-		ques.add(new Way(null, itemChecked));
+		quesx.add(new Way(null, itemChecked));
 		danhdau.put(itemChecked, "1");
-		while (ques.size() > 0) {
-			Way item = ques.get(ques.size() - 1);
-			danhdau.put(item.getIt(), "1");
-			ques.remove(item);
 
-			int x = item.getIt().getPosition().x;
-			int y = item.getIt().getPosition().y;
+		while (quesx.size() > 0) {
+			List<Way> tempQue = new ArrayList<Way>();
+			tempQue.addAll(quesx);
+			quesx.clear();
 
-			// check 4 o
-			// x, y +1
-			if (y < COLUMNS - 1) {
-				ItemObject it = boards[x][y + 1];
-				Way way = new Way(item, it);
+			while (tempQue.size() > 0) {
 
-				if (it == itemSelected) {
-					return way;
+				Way item = tempQue.get(tempQue.size() - 1);
+				danhdau.put(item.getIt(), "1");
+				tempQue.remove(item);
+
+				int x = item.getIt().getPosition().x;
+				int y = item.getIt().getPosition().y;
+
+				// check 4 o
+				// x, y +1
+				if (y < COLUMNS - 1) {
+					ItemObject it = boards[x][y + 1];
+					Way way = new Way(item, it);
+
+					if (it == itemSelected) {
+						return way;
+					}
+
+					if (danhdau.get(it) == null && !it.isBig()) {
+						quesx.add(way);
+					}
 				}
+				// x , y-1
+				if (y > 0) {
+					ItemObject it = boards[x][y - 1];
+					Way way = new Way(item, it);
 
-				if (danhdau.get(it) == null && !it.isBig()) {
-					ques.add(way);
+					if (it == itemSelected) {
+						return way;
+					}
+
+					if (danhdau.get(it) == null && !it.isBig()) {
+						quesx.add(way);
+					}
 				}
-			}
-			// x , y-1
-			if (y > 0) {
-				ItemObject it = boards[x][y - 1];
-				Way way = new Way(item, it);
+				// x -1, y
+				if (x > 0) {
+					ItemObject it = boards[x - 1][y];
+					Way way = new Way(item, it);
 
-				if (it == itemSelected) {
-					return way;
+					if (it == itemSelected) {
+						return way;
+					}
+
+					if (danhdau.get(it) == null && !it.isBig()) {
+						quesx.add(way);
+					}
 				}
+				// x+ 1, y
+				if (x < ROWS - 1) {
+					ItemObject it = boards[x + 1][y];
+					Way way = new Way(item, it);
 
-				if (danhdau.get(it) == null && !it.isBig()) {
-					ques.add(way);
-				}
-			}
-			// x -1, y
-			if (x > 0) {
-				ItemObject it = boards[x - 1][y];
-				Way way = new Way(item, it);
+					if (it == itemSelected) {
+						return way;
+					}
 
-				if (it == itemSelected) {
-					return way;
-				}
-
-				if (danhdau.get(it) == null && !it.isBig()) {
-					ques.add(way);
-				}
-			}
-			// x+ 1, y
-			if (x < ROWS - 1) {
-				ItemObject it = boards[x + 1][y];
-				Way way = new Way(item, it);
-
-				if (it == itemSelected) {
-					return way;
-				}
-
-				if (danhdau.get(it) == null && !it.isBig()) {
-					ques.add(way);
+					if (danhdau.get(it) == null && !it.isBig()) {
+						quesx.add(way);
+					}
 				}
 			}
 			// neu 1 trong 4 o la diem den --> ket thuc
@@ -106,7 +114,7 @@ public class SweetUtils {
 	}
 
 	public static boolean isClickBy(BaseMSprise newGame, int x, int y) {
-		return newGame.getSprCat().getX() < x && x < newGame.getSprCat().getX() + newGame.getSprCat().getWidth() &&
-				newGame.getSprCat().getY() < y && y< newGame.getSprCat().getY() + newGame.getSprCat().getHeight();
+		return newGame.getSprCat().getX() < x && x < newGame.getSprCat().getX() + newGame.getSprCat().getWidth() && newGame.getSprCat().getY() < y
+				&& y < newGame.getSprCat().getY() + newGame.getSprCat().getHeight();
 	}
 }

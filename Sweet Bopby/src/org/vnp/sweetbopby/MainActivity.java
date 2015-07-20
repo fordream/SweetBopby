@@ -102,6 +102,25 @@ public class MainActivity extends BaseMGameActivty {
 						// FIXME
 						// check an hay khong
 						List<ItemObject> eat = checkEat(selected);
+						if (eat.size() == 0) {
+							phontTo();
+							// check eat when phong to
+							for (int i = 0; i < SweetUtils.ROWS; i++) {
+								for (int j = 0; j < SweetUtils.COLUMNS; j++) {
+									if (boards[i][j].isBig()) {
+										List<ItemObject> eatTemp = checkEat(boards[i][j]);
+										if (eatTemp.size() > 0) {
+											for (ItemObject itemx : eatTemp) {
+												if (!eat.contains(itemx)) {
+													eat.add(itemx);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+
 						if (eat.size() > 0) {
 							score = score + eat.size() * 2;
 							updateScore();
@@ -112,6 +131,7 @@ public class MainActivity extends BaseMGameActivty {
 							}
 							// clear ball ear
 						} else {
+							// check an when phon to
 							randomNext();
 						}
 
@@ -321,7 +341,6 @@ public class MainActivity extends BaseMGameActivty {
 	}
 
 	private ItemObject getItemSlected(int x, int y) {
-		LogUtils.e("ASXZ", "test " + x + " " + y);
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				if (boards[i][j].isSelected(x, y)) {
@@ -396,14 +415,18 @@ public class MainActivity extends BaseMGameActivty {
 		}
 	}
 
-	private void randomNext() {
-		List<ItemObject> items = new ArrayList<ItemObject>();
-
+	private void phontTo() {
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].toBig(getmMainScene(), mBoard);
 			}
 		}
+
+	}
+
+	private void randomNext() {
+		// Phong to
+		List<ItemObject> items = new ArrayList<ItemObject>();
 
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
@@ -462,38 +485,16 @@ public class MainActivity extends BaseMGameActivty {
 		Random random = new Random();
 
 		for (int i = 0; i < 3; i++) {
-			
 			int index = random.nextInt(list.size());
-			
 			ItemObject object = list.get(index);
 			list.remove(index);
-			
-			
 			object.randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
-//			int px = random.nextInt(SweetUtils.COLUMNS);
-//			int py = random.nextInt(SweetUtils.ROWS);
-//			if (boards[px][py].getType() != -1) {
-//				i--;
-//			} else {
-//				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
-//			}
 		}
 		for (int i = 0; i < 3; i++) {
-			
 			int index = random.nextInt(list.size());
-			
 			ItemObject object = list.get(index);
 			list.remove(index);
-			
-			
 			object.randomType(getmMainScene(), 10 * (random.nextInt(SweetUtils.MAXTYPEBALL) + 1), mBoard);
-//			int px = random.nextInt(SweetUtils.COLUMNS);
-//			int py = random.nextInt(SweetUtils.ROWS);
-//			if (boards[px][py].getType() != -1) {
-//				i--;
-//			} else {
-//				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
-//			}
 		}
 		updateScore();
 	}

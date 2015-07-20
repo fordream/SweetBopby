@@ -24,8 +24,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.acv.cheerz.db.DataStore;
-import com.vnp.core.common.CommonAndroid;
-import com.vnp.core.common.LogUtils;
 
 public class MainActivity extends BaseMGameActivty {
 	private BaseMSprise bg = new BaseMSprise();
@@ -46,12 +44,11 @@ public class MainActivity extends BaseMGameActivty {
 
 		@Override
 		public void onLoadResources(Engine mEngine, Context context) {
-			onLoadResources(false, getEngine(), context, "move.mp3", false);
+			onLoadResources(false, getEngine(), context, "OwlWalk.mp3", false);
 		}
 	};
 
 	private BaseMusic musicEat = new BaseMusic() {
-
 		@Override
 		public void onLoadResources(Engine mEngine, Context context) {
 			onLoadResources(false, getEngine(), MainActivity.this, "explode.mp3", false);
@@ -62,7 +59,14 @@ public class MainActivity extends BaseMGameActivty {
 
 		@Override
 		public void onLoadResources(Engine mEngine, Context context) {
-			onLoadResources(false, getEngine(), MainActivity.this, "explode.mp3", false);
+			onLoadResources(false, getEngine(), MainActivity.this, "Whoo!.mp3", false);
+		}
+	};
+	private BaseMusic musicLostWay = new BaseMusic() {
+
+		@Override
+		public void onLoadResources(Engine mEngine, Context context) {
+			onLoadResources(false, getEngine(), MainActivity.this, "Mistake.mp3", false);
 		}
 	};
 	private BaseMusic musicBackground = new BaseMusic() {
@@ -121,7 +125,7 @@ public class MainActivity extends BaseMGameActivty {
 					// FIXME find way
 					Way way = SweetUtils.findway(itemChecked, selected, boards);
 					if (way != null) {
-						// musicMove.play();
+						musicMove.play();
 						selected.randomType(getmMainScene(), itemChecked.getType(), mBoard);
 						itemChecked.clear(getmMainScene());
 
@@ -170,7 +174,11 @@ public class MainActivity extends BaseMGameActivty {
 							randomNext();
 						}
 
+					} else {
+						musicLostWay.play();
 					}
+				} else if (selected.isBig()) {
+					musicLostWay.play();
 				}
 			}
 		}
@@ -434,16 +442,16 @@ public class MainActivity extends BaseMGameActivty {
 		getmMainScene().attachChild(gameover.getSprCat(), 100);
 
 		createNewGame();
-		
+
 		musicBackground.play();
 	}
-	
+
 	@Override
 	public void onPauseGame() {
 		super.onPauseGame();
 		musicBackground.pause();
 	}
-	
+
 	@Override
 	public void onResumeGame() {
 		super.onResumeGame();
@@ -488,6 +496,7 @@ public class MainActivity extends BaseMGameActivty {
 			updateMaxScore();
 			gameover.getSprCat().setVisible(true);
 			// FIXME
+			musicLost.play();
 			return;
 		}
 
@@ -567,7 +576,9 @@ public class MainActivity extends BaseMGameActivty {
 
 		musicMove.onLoadResources(getEngine(), this);
 		musicEat.onLoadResources(mEngine, this);
+		musicLost.onLoadResources(mEngine, this);
 		musicBackground.onLoadResources(getEngine(), this);
+		musicLostWay.onLoadResources(mEngine, this);
 	}
 
 	@Override

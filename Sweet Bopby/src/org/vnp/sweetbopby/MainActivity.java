@@ -451,25 +451,50 @@ public class MainActivity extends BaseMGameActivty {
 	public void createNewGame() {
 		gameover.getSprCat().setVisible(false);
 		score = 0;
+		List<ItemObject> list = new ArrayList<ItemObject>();
 		for (int i = 0; i < SweetUtils.ROWS; i++) {
 			for (int j = 0; j < SweetUtils.COLUMNS; j++) {
 				boards[i][j].clear(getmMainScene());
+				list.add(boards[i][j]);
 			}
 		}
 
 		Random random = new Random();
 
 		for (int i = 0; i < 3; i++) {
-			int px = random.nextInt(SweetUtils.COLUMNS);
-			int py = random.nextInt(SweetUtils.ROWS);
-
-			if (boards[px][py].getType() != -1) {
-				i--;
-			} else {
-				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
-			}
+			
+			int index = random.nextInt(list.size());
+			
+			ItemObject object = list.get(index);
+			list.remove(index);
+			
+			
+			object.randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
+//			int px = random.nextInt(SweetUtils.COLUMNS);
+//			int py = random.nextInt(SweetUtils.ROWS);
+//			if (boards[px][py].getType() != -1) {
+//				i--;
+//			} else {
+//				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
+//			}
 		}
-
+		for (int i = 0; i < 3; i++) {
+			
+			int index = random.nextInt(list.size());
+			
+			ItemObject object = list.get(index);
+			list.remove(index);
+			
+			
+			object.randomType(getmMainScene(), 10 * (random.nextInt(SweetUtils.MAXTYPEBALL) + 1), mBoard);
+//			int px = random.nextInt(SweetUtils.COLUMNS);
+//			int py = random.nextInt(SweetUtils.ROWS);
+//			if (boards[px][py].getType() != -1) {
+//				i--;
+//			} else {
+//				boards[px][py].randomType(getmMainScene(), random.nextInt(SweetUtils.MAXTYPEBALL) + 1, mBoard);
+//			}
+		}
 		updateScore();
 	}
 

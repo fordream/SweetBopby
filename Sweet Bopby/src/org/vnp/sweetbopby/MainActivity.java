@@ -381,7 +381,7 @@ public class MainActivity extends BaseMGameActivty {
 		highNumber.setText(getMaxScore() + "");
 
 		gameover.getSprCat().setPosition((getmCamera().getWidth() - gameover.getSprCat().getWidth()) / 2, (getmCamera().getHeight() - gameover.getSprCat().getHeight()) / 2);
-		getmMainScene().attachChild(gameover.getSprCat(), 30);
+		getmMainScene().attachChild(gameover.getSprCat(), 100);
 
 		createNewGame();
 	}
